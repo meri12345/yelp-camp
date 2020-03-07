@@ -1,21 +1,44 @@
 var express = require("express");
 var app = express();
 var bodyParser=require("body-parser");
+var mongoose=require("mongoose");
+mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useUnifiedTopology:true, useNewUrlParser:true});
+
+var campSchema = new mongoose.Schema({
+	name: String,
+	image: String,
+	desc: String
+});
+
+var Camp = mongoose.model("Camp",campSchema);
+
+// Camp.create({
+// 	name:"Great Smokey Mountain",
+// 	image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80",
+// 	desc:"You shoudl go there"
+// },(err,item)=>{
+// 	if(err){
+// 		console.log("ERROR");
+// 	}
+// 	else{
+// 		console.log("*************SUCCESS************")
+// }})
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs")
 
+
 var list =[
-	{name:"Great Smokey Mountain",image:"https://pixabay.com/get/52e8d4444255ae14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Yosemite National Park",image:"https://pixabay.com/get/52e5d7414355ac14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Acadia National Park",image:"https://pixabay.com/get/57e8d0424a5bae14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Hot Springs National Park",image:"https://pixabay.com/get/57e8d1454b56ae14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Biscayne National Park",image:"https://pixabay.com/get/50e9d4474856b108f5d084609620367d1c3ed9e04e507441762b7ed7904fcc_340.jpg"},
-	{name:"Great Smokey Mountain",image:"https://pixabay.com/get/52e8d4444255ae14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Yosemite National Park",image:"https://pixabay.com/get/52e5d7414355ac14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Acadia National Park",image:"https://pixabay.com/get/57e8d0424a5bae14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Hot Springs National Park",image:"https://pixabay.com/get/57e8d1454b56ae14f6da8c7dda793f7f1636dfe2564c704c7d2c7fd1944ac751_340.jpg"},
-	{name:"Biscayne National Park",image:"https://pixabay.com/get/50e9d4474856b108f5d084609620367d1c3ed9e04e507441762b7ed7904fcc_340.jpg"}
+	{name:"Great Smokey Mountain",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Yosemite National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Acadia National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Hot Springs National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Biscayne National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Great Smokey Mountain",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Yosemite National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Acadia National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Hot Springs National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
+	{name:"Biscayne National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"}
 ]
 
 app.get("/",(req,res)=>{
@@ -25,8 +48,17 @@ app.get("/",(req,res)=>{
 app.post("/campgrounds",(req,res)=>{
 	var name = req.body.name;
 	var image = req.body.image;
-	list.push({name:name,image:image})
-	res.redirect("/campgrounds");
+	var desc=req.body.desc;
+	var obj = {name:name,image:image,desc:desc};
+	Camp.create(obj,(err,item)=>{
+		if(err){
+			console.log(err);
+		}
+		else{
+			res.redirect("/campgrounds");
+		}
+	})
+	
 })
 
 app.get("/campgrounds/new",(req,res)=>{
@@ -34,8 +66,26 @@ app.get("/campgrounds/new",(req,res)=>{
 })
 
 app.get("/campgrounds",(req,res)=>{
+	Camp.find({}).then((items)=>{
+		res.render("index",{list:items})
+	})
+	.catch((err)=>{
+		console.log(err);
+	})
 	
-	res.render("campgrounds",{list:list});
+})
+
+app.get("/campgrounds/:id",(req,res)=>{
+	Camp.findById(req.params.id,(err,item)=>{
+		if(err){
+			console.log("ERROR");
+		}
+		else{
+			
+			res.render("show",{camp:item});
+		}
+	})
+	
 })
 
 app.listen(3000,()=>{
