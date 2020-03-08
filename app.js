@@ -2,44 +2,15 @@ var express = require("express");
 var app = express();
 var bodyParser=require("body-parser");
 var mongoose=require("mongoose");
+var Camp=require("./models/campground");
+var seedDB = require("./seeds");
+
+// seedDB();
 mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useUnifiedTopology:true, useNewUrlParser:true});
-
-var campSchema = new mongoose.Schema({
-	name: String,
-	image: String,
-	desc: String
-});
-
-var Camp = mongoose.model("Camp",campSchema);
-
-// Camp.create({
-// 	name:"Great Smokey Mountain",
-// 	image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80",
-// 	desc:"You shoudl go there"
-// },(err,item)=>{
-// 	if(err){
-// 		console.log("ERROR");
-// 	}
-// 	else{
-// 		console.log("*************SUCCESS************")
-// }})
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs")
 
-
-var list =[
-	{name:"Great Smokey Mountain",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Yosemite National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Acadia National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Hot Springs National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Biscayne National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Great Smokey Mountain",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Yosemite National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Acadia National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Hot Springs National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"},
-	{name:"Biscayne National Park",image:"https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=659&q=80"}
-]
 
 app.get("/",(req,res)=>{
 	res.render("landing");
@@ -76,12 +47,12 @@ app.get("/campgrounds",(req,res)=>{
 })
 
 app.get("/campgrounds/:id",(req,res)=>{
-	Camp.findById(req.params.id,(err,item)=>{
+	Camp.findById(req.params.id).populate("comments").exec((err,item)=>{
 		if(err){
 			console.log("ERROR");
 		}
 		else{
-			
+			console.log(item);
 			res.render("show",{camp:item});
 		}
 	})

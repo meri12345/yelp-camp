@@ -8,5 +8,9 @@
 	<%=camp.desc%>
 </p>
 
+	<% for(el of camp.comments) {%>
+	<p><strong><%=el.author%></strong> - <%=el.text%></p>
+	<%}%>
+
 
 <%- include("partials/footer") %>
